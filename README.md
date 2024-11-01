@@ -75,7 +75,108 @@ this is a repository about  research on the domain of reinforcement learning and
 
 尝试替换 iseec 里面的初始条件
 
+## ISEEC python-env v5
 
+
+
+# ISEEC 模型 v5 - 增强插值版
+
+## 概述
+
+此 Python 脚本（`iseec-model_v5_interp.py`）实现了一个综合能源与排放气候（ISEEC）模型，用于模拟碳排放、能源使用和温度动态。该模型使用微分方程来表示各种环境、经济和能源相关参数之间的相互作用。此外，它通过插值来处理外部输入数据，允许在模拟过程中为某些变量提供连续的数据输入。
+
+## 特性
+
+- **ODE 模拟**：使用 `scipy.integrate.odeint` 来求解代表气候相关过程的微分方程。
+- **参数插值**：使用 `np.interp` 将离散数据输入转换为连续函数，提高模拟精度。
+- **时间范围**：模拟环境动态从 1850 年至 2100 年。
+- **输出**：将详细的输出数据（如温度、CO₂ 排放、能源使用）保存到 Excel 文件中，以便进一步分析。
+
+## 环境要求
+
+- Python 3.x
+- 所需库：
+  - `numpy`
+  - `scipy`
+  - `pandas`
+  - `matplotlib`
+
+可以通过以下命令安装所需库：
+
+```
+bash
+
+
+复制代码
+pip install numpy scipy pandas matplotlib
+```
+
+## 生成的文件
+
+- `iseec_10_dimension_results_ACEno_revised.xlsx`：包含主要变量随时间的模拟结果。
+- `iseec_10_dimension_t_ode.xlsx`：包含 ODE 求解过程中记录的时间步。(主要用来参照调试使用)
+- `iseec_results_ode_withoutinterp.xlsx`：包含未插值调整的参数计算值。（ode 函数自定义求解的结果）
+- `iseec_results_time_withinterp.xlsx`：包含与主时间序列匹配的插值结果。（主要参照比较的结果）
+
+## 脚本结构
+
+### 1. **参数初始化**（包括外界输入）
+
+脚本初始化了多个常数和参数，包括气候和碳循环反馈参数、基准 CO₂ 排放、GDP 数据和初始能源相关值。数据源包括：
+
+- `ISEEC-SSM/output_CO2emission_baseline18502100_LU.csv`：基准土地利用 CO₂ 排放数据。
+- `ISEEC-SSM/output_nonco2_forcing_all_BAU.CSV`：非 CO₂ 强迫数据。（默认图表中计算得到的）
+- `ISEEC-SSM/output_energy_MYbaseline18502100_total_formulated.csv`：总能源基准数据。
+- `ISEEC-SSM/output_GDP_SSP5_this study.csv`：SSP5 场景的 GDP 数据。
+
+### 2. **函数定义**
+
+#### `IEM(y, t)`
+
+定义了温度和碳动态的微分方程主函数：
+
+- **插值输入**：对于某些参数（如 `CO2emission_baseline18502100_LU`、`additionalforcing`、`energy_MYbaseline18502100_total` 和 `GDP_formulated`），通过 `np.interp` 在每个时间步获得连续的函数值。
+
+- 方程组成
+
+  ：
+
+  - ϕi\phi_iϕi：依赖于截至当前时间的累计 CO₂ 排放。
+  - αi\alpha_iαi：一个基于当前 CO₂ 水平的动态参数。
+  - **温度和排放计算**：利用基准和插值数据计算温度（`T_a`）、大气 CO₂（`C_a`）和海洋 CO₂ 水平。
+
+### 3. **模拟执行**
+
+脚本初始化初始条件，并在指定时间范围内使用 `odeint` 运行模拟。
+
+- **初始条件**：在 `y0` 数组中设置，包含温度和 CO₂ 水平的初始值。
+- **输出变量**：提取每个组件的结果（例如 `T_a`、`C_a`、`C_o`），并将它们保存到结构化的输出文件中。
+
+### 4. **数据输出**
+
+脚本使用 `pandas` 将模拟结果保存到各种 Excel 文件中。关键结果包括：
+
+- 主要变量的时间序列数据（如温度、CO₂ 水平）。
+- 可再生能源与总能源需求的比例。
+- 基准和调整后的能源使用插值结果。
+
+## 使用方法
+
+确保所有必要的数据文件位于 `ISEEC-SSM` 目录中，然后执行脚本：
+
+```
+bash
+
+
+复制代码
+python iseec-model_v5_interp.py
+```
+
+运行完成后，脚本将输出多个包含模拟结果的 Excel 文件，可用于进一步分析、可视化或与实测数据进行验证。
+
+## 注意事项
+
+- **插值处理**：
 
 
 
