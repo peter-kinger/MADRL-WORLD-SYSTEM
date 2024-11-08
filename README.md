@@ -2,7 +2,11 @@
 this is a repository about  research on the domain of reinforcement learning and world system model to analyse the human activity and warming problems
 
 ### Env 环境主要参考依据于：
+仓库内容是对他们文章内容理解的重现，非常感谢他们提出的优秀模型！
+The repository content is a reproduction of the understanding of the content of their article, and I am very grateful to them for the excellent model they proposed!
+
 Sanderson, Benjamin M., et al. "Community climate simulations to assess avoided impacts in 1.5 and 2 C futures." Earth System Dynamics 8.3 (2017): 827-847.
+
 Ramanathan, Veerabhadran, Yangyang Xu, and Anthony Versaci. "Modelling human–natural systems interactions with implications for twenty-first-century warming." Nature Sustainability 5.3 (2022): 263-271.
 
 # mices 迭代版本说明
